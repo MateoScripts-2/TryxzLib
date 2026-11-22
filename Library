@@ -1,5 +1,5 @@
 --[[
-    TryxzLib v1.0
+    TryxzLib v1.1
     Modern, Animated & Mobile-Friendly UI Library
     Developed by M4teoScripts
 ]]
@@ -22,7 +22,7 @@ if ParentGui:FindFirstChild("TryxzLib_UI") then
     ParentGui.TryxzLib_UI:Destroy()
 end
 
--- Utilidades de Tween y Dragging
+-- Utilidades de Tween y Dragging (Soporte táctil y ratón)
 local function Tween(obj, props, duration, style, dir)
     local info = TweenInfo.new(duration or 0.25, style or Enum.EasingStyle.Quart, dir or Enum.EasingDirection.Out)
     local t = TweenService:Create(obj, info, props)
@@ -66,11 +66,11 @@ ScreenGui.ResetOnSpawn = false
 ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 ScreenGui.Parent = ParentGui
 
--- Contenedor de Notificaciones
+-- Contenedor de Notificaciones Animadas
 local NotifContainer = Instance.new("Frame")
 NotifContainer.Name = "Notifications"
-NotifContainer.Size = UDim2.new(0, 280, 1, -20)
-NotifContainer.Position = UDim2.new(1, -295, 0, 10)
+NotifContainer.Size = UDim2.new(0, 285, 1, -20)
+NotifContainer.Position = UDim2.new(1, -300, 0, 10)
 NotifContainer.BackgroundTransparency = 1
 NotifContainer.Parent = ScreenGui
 
@@ -80,7 +80,7 @@ NotifLayout.VerticalAlignment = Enum.VerticalAlignment.Bottom
 NotifLayout.Padding = UDim.new(0, 8)
 NotifLayout.Parent = NotifContainer
 
--- Sistema de Sonidos
+-- Sistema de Sonidos Personalizados
 local SoundFolder = Instance.new("Folder")
 SoundFolder.Name = "TryxzSounds"
 SoundFolder.Parent = ScreenGui
@@ -108,7 +108,7 @@ function TryxzLib:PlaySound(soundId, volume)
     end)
 end
 
--- Función de Notificaciones
+-- Notificaciones con Iconos y Sonidos Personalizados
 function TryxzLib:Notify(opts)
     opts = opts or {}
     local Title = opts.Title or "TryxzLib"
@@ -177,7 +177,6 @@ function TryxzLib:Notify(opts)
     Bar.BorderSizePixel = 0
     Bar.Parent = Card
 
-    -- Animación de Entrada
     Tween(Card, {BackgroundTransparency = 0.05}, 0.3)
     Tween(Stroke, {Transparency = 0.2}, 0.3)
     Tween(IconImg, {ImageTransparency = 0}, 0.3)
@@ -202,12 +201,11 @@ end
 function TryxzLib:CreateWindow(config)
     config = config or {}
     local TitleText = config.Title or "TryxzLib"
-    local SubtitleText = config.Subtitle or "v1.0 • Modern Interface"
+    local SubtitleText = config.Subtitle or "v1.1 • Modern Interface"
     local TitleIcon = config.Icon or "rbxassetid://10734950309"
-    local GearIcon = config.MinimizeIcon or "rbxassetid://10734950309" -- Tuerca por defecto
+    local GearIcon = config.MinimizeIcon or "rbxassetid://10734950309"
     local Size = config.Size or UDim2.new(0, 520, 0, 340)
 
-    -- Tema Personalizable
     local Theme = {
         Background = (config.Theme and config.Theme.Background) or Color3.fromRGB(16, 18, 24),
         Topbar = (config.Theme and config.Theme.Topbar) or Color3.fromRGB(22, 25, 34),
@@ -219,7 +217,6 @@ function TryxzLib:CreateWindow(config)
         SubText = (config.Theme and config.Theme.SubText) or Color3.fromRGB(150, 155, 170)
     }
 
-    -- Sonidos Personalizados de Ventana
     local Sounds = {
         Click = (config.Sounds and config.Sounds.Click) or DefaultSounds.Click,
         Toggle = (config.Sounds and config.Sounds.Toggle) or DefaultSounds.Toggle,
@@ -260,7 +257,7 @@ function TryxzLib:CreateWindow(config)
     -- Animación de Apertura
     Tween(Main, {Size = Size}, 0.45, Enum.EasingStyle.Back, Enum.EasingDirection.Out)
 
-    -- Botón Flotante (Tuerca de Ajustes al minimizar)
+    -- Tuerca de Ajustes Flotante al Minimizar
     local MiniBtn = Instance.new("ImageButton")
     MiniBtn.Name = "MinimizeGear"
     MiniBtn.Size = UDim2.new(0, 0, 0, 0)
@@ -308,7 +305,7 @@ function TryxzLib:CreateWindow(config)
 
     MakeDraggable(Topbar, Main)
 
-    -- Icono y Títulos en Topbar
+    -- Icono, Título y Subtítulo
     local WinIcon = Instance.new("ImageLabel")
     WinIcon.Size = UDim2.new(0, 26, 0, 26)
     WinIcon.Position = UDim2.new(0, 14, 0.5, -13)
@@ -318,7 +315,7 @@ function TryxzLib:CreateWindow(config)
     WinIcon.Parent = Topbar
 
     local WinTitle = Instance.new("TextLabel")
-    WinTitle.Size = UDim2.new(0, 250, 0, 20)
+    WinTitle.Size = UDim2.new(0, 220, 0, 20)
     WinTitle.Position = UDim2.new(0, 48, 0, 6)
     WinTitle.BackgroundTransparency = 1
     WinTitle.Text = TitleText
@@ -329,7 +326,7 @@ function TryxzLib:CreateWindow(config)
     WinTitle.Parent = Topbar
 
     local WinSub = Instance.new("TextLabel")
-    WinSub.Size = UDim2.new(0, 250, 0, 15)
+    WinSub.Size = UDim2.new(0, 220, 0, 15)
     WinSub.Position = UDim2.new(0, 48, 0, 26)
     WinSub.BackgroundTransparency = 1
     WinSub.Text = SubtitleText
@@ -351,7 +348,7 @@ function TryxzLib:CreateWindow(config)
     CreditLbl.TextXAlignment = Enum.TextXAlignment.Right
     CreditLbl.Parent = Topbar
 
-    -- Botones de Control (Minimizar y Cerrar/Eliminar)
+    -- Botón Minimizar (—) y Botón Eliminar GUI (✕)
     local MinBtn = Instance.new("TextButton")
     MinBtn.Size = UDim2.new(0, 28, 0, 28)
     MinBtn.Position = UDim2.new(1, -68, 0.5, -14)
@@ -374,7 +371,7 @@ function TryxzLib:CreateWindow(config)
     CloseBtn.Parent = Topbar
     Instance.new("UICorner", CloseBtn).CornerRadius = UDim.new(0, 7)
 
-    -- Lógica Minimizar <-> Tuerca
+    -- Alternar Minimizado <-> Tuerca de Ajustes
     local isMinimized = false
     local function ToggleMinimize()
         TryxzLib:PlaySound(Sounds.Minimize, 0.5)
@@ -401,16 +398,19 @@ function TryxzLib:CreateWindow(config)
     MinBtn.MouseButton1Click:Connect(ToggleMinimize)
     MiniBtn.MouseButton1Click:Connect(ToggleMinimize)
 
-    -- Lógica Eliminar GUI
-    CloseBtn.MouseButton1Click:Connect(function()
+    -- Eliminar GUI completamente
+    local function DestroyGui()
         TryxzLib:PlaySound(Sounds.Click, 0.5)
         Tween(Main, {Size = UDim2.new(0, 0, 0, 0)}, 0.3, Enum.EasingStyle.Back, Enum.EasingDirection.In)
+        Tween(MiniBtn, {Size = UDim2.new(0, 0, 0, 0)}, 0.25)
         task.wait(0.32)
         if rotConnection then rotConnection:Disconnect() end
         ScreenGui:Destroy()
-    end)
+    end
 
-    -- Barra Lateral de Pestañas (Sidebar con Scroll)
+    CloseBtn.MouseButton1Click:Connect(DestroyGui)
+
+    -- Sidebar con Scroll para Pestañas
     local Sidebar = Instance.new("ScrollingFrame")
     Sidebar.Size = UDim2.new(0, 145, 1, -56)
     Sidebar.Position = UDim2.new(0, 8, 0, 52)
@@ -429,6 +429,7 @@ function TryxzLib:CreateWindow(config)
 
     local SidePad = Instance.new("UIPadding", Sidebar)
     SidePad.PaddingTop = UDim.new(0, 6)
+    SidePad.PaddingBottom = UDim.new(0, 6)
     SidePad.PaddingLeft = UDim.new(0, 6)
     SidePad.PaddingRight = UDim.new(0, 6)
 
@@ -445,11 +446,15 @@ function TryxzLib:CreateWindow(config)
     }
 
     function WindowObj:Destroy()
-        if rotConnection then rotConnection:Disconnect() end
-        ScreenGui:Destroy()
+        DestroyGui()
     end
 
-    -- Crear Pestaña
+    function WindowObj:SetTitle(newTitle, newSub)
+        if newTitle then WinTitle.Text = newTitle end
+        if newSub then WinSub.Text = newSub end
+    end
+
+    -- Crear Pestaña con Icono y Scroll
     function WindowObj:CreateTab(tabOpts)
         tabOpts = tabOpts or {}
         local TabName = tabOpts.Name or "Tab"
@@ -492,7 +497,6 @@ function TryxzLib:CreateWindow(config)
         TabLbl.TextXAlignment = Enum.TextXAlignment.Left
         TabLbl.Parent = TabBtn
 
-        -- Página con Scroll
         local Page = Instance.new("ScrollingFrame")
         Page.Size = UDim2.new(1, 0, 1, 0)
         Page.BackgroundTransparency = 1
@@ -653,6 +657,10 @@ function TryxzLib:CreateWindow(config)
                 task.delay(0.15, function() Tween(Stroke, {Transparency = 0.8}, 0.25) end)
                 if bOpts.Callback then task.spawn(bOpts.Callback) end
             end)
+
+            return {
+                SetText = function(_, newText) Lbl.Text = newText end
+            }
         end
 
         -- 4. Toggle
@@ -752,8 +760,8 @@ function TryxzLib:CreateWindow(config)
             ValLbl.Parent = Frame
 
             local BarBg = Instance.new("Frame")
-            BarBg.Size = UDim2.new(1, -24, 0, 6)
-            BarBg.Position = UDim2.new(0, 12, 0, 34)
+            BarBg.Size = UDim2.new(1, -24, 0, 8)
+            BarBg.Position = UDim2.new(0, 12, 0, 33)
             BarBg.BackgroundColor3 = Theme.Sidebar
             BarBg.Parent = Frame
             Instance.new("UICorner", BarBg).CornerRadius = UDim.new(1, 0)
@@ -803,7 +811,7 @@ function TryxzLib:CreateWindow(config)
             }
         end
 
-        -- 6. Input (TextBox)
+        -- 6. Input
         function TabObj:CreateInput(iOpts)
             iOpts = iOpts or {}
             local Frame = Instance.new("Frame")
@@ -838,11 +846,15 @@ function TryxzLib:CreateWindow(config)
             Instance.new("UICorner", Box).CornerRadius = UDim.new(0, 6)
 
             Box.FocusLost:Connect(function(enterPressed)
-                TryxzLib:PlaySound(Sounds.Click, 0.4)
+                TryxzLib:PlaySound(iOpts.Sound or Sounds.Click, 0.4)
                 if iOpts.Callback then
                     task.spawn(iOpts.Callback, Box.Text, enterPressed)
                 end
             end)
+
+            return {
+                Set = function(_, newText) Box.Text = newText end
+            }
         end
 
         -- 7. Dropdown & Multi-Dropdown
@@ -910,17 +922,17 @@ function TryxzLib:CreateWindow(config)
             local ListLayout = Instance.new("UIListLayout", ListFrame)
             ListLayout.Padding = UDim.new(0, 4)
 
-            local function UpdateStatus()
+            local function UpdateStatus(trigger)
                 if Multi then
                     local list = {}
                     for k, v in pairs(Selected) do
                         if v then table.insert(list, k) end
                     end
                     StatusLbl.Text = #list > 0 and table.concat(list, ", ") or "Ninguno"
-                    if dOpts.Callback then task.spawn(dOpts.Callback, list) end
+                    if trigger and dOpts.Callback then task.spawn(dOpts.Callback, list) end
                 else
                     StatusLbl.Text = tostring(Selected)
-                    if dOpts.Callback then task.spawn(dOpts.Callback, Selected) end
+                    if trigger and dOpts.Callback then task.spawn(dOpts.Callback, Selected) end
                 end
             end
 
@@ -942,18 +954,18 @@ function TryxzLib:CreateWindow(config)
                     Instance.new("UICorner", OptBtn).CornerRadius = UDim.new(0, 6)
 
                     OptBtn.MouseButton1Click:Connect(function()
-                        TryxzLib:PlaySound(Sounds.Click, 0.4)
+                        TryxzLib:PlaySound(dOpts.Sound or Sounds.Click, 0.4)
                         if Multi then
                             Selected[opt] = not Selected[opt]
                             OptBtn.TextColor3 = Selected[opt] and Theme.Accent or Theme.SubText
-                            UpdateStatus()
+                            UpdateStatus(true)
                         else
                             Selected = opt
                             for _, b in ipairs(ListFrame:GetChildren()) do
                                 if b:IsA("TextButton") then b.TextColor3 = Theme.SubText end
                             end
                             OptBtn.TextColor3 = Theme.Accent
-                            UpdateStatus()
+                            UpdateStatus(true)
                             Opened = false
                             Tween(Arrow, {Rotation = 0}, 0.2)
                             Tween(Frame, {Size = UDim2.new(1, 0, 0, 38)}, 0.22)
@@ -963,7 +975,7 @@ function TryxzLib:CreateWindow(config)
             end
 
             RebuildOptions(Options)
-            UpdateStatus()
+            UpdateStatus(false)
 
             Header.MouseButton1Click:Connect(function()
                 TryxzLib:PlaySound(Sounds.Click, 0.4)
@@ -990,3 +1002,4 @@ function TryxzLib:CreateWindow(config)
 end
 
 return TryxzLib
+ 
