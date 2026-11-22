@@ -1,5 +1,5 @@
 --[[
-    TryxzLib v1.1
+    TryxzLib v1.2
     Modern, Animated & Mobile-Friendly UI Library
     Developed by M4teoScripts
 ]]
@@ -22,7 +22,7 @@ if ParentGui:FindFirstChild("TryxzLib_UI") then
     ParentGui.TryxzLib_UI:Destroy()
 end
 
--- Utilidades de Tween y Dragging (Soporte táctil y ratón)
+-- Utilidades de Animación y Arrastre (Móvil + PC)
 local function Tween(obj, props, duration, style, dir)
     local info = TweenInfo.new(duration or 0.25, style or Enum.EasingStyle.Quart, dir or Enum.EasingDirection.Out)
     local t = TweenService:Create(obj, info, props)
@@ -66,7 +66,7 @@ ScreenGui.ResetOnSpawn = false
 ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 ScreenGui.Parent = ParentGui
 
--- Contenedor de Notificaciones Animadas
+-- Contenedor de Notificaciones
 local NotifContainer = Instance.new("Frame")
 NotifContainer.Name = "Notifications"
 NotifContainer.Size = UDim2.new(0, 285, 1, -20)
@@ -108,7 +108,7 @@ function TryxzLib:PlaySound(soundId, volume)
     end)
 end
 
--- Notificaciones con Iconos y Sonidos Personalizados
+-- Notificaciones Animadas con Iconos y Sonidos
 function TryxzLib:Notify(opts)
     opts = opts or {}
     local Title = opts.Title or "TryxzLib"
@@ -201,7 +201,7 @@ end
 function TryxzLib:CreateWindow(config)
     config = config or {}
     local TitleText = config.Title or "TryxzLib"
-    local SubtitleText = config.Subtitle or "v1.1 • Modern Interface"
+    local SubtitleText = config.Subtitle or "v1.2 • Modern Interface"
     local TitleIcon = config.Icon or "rbxassetid://10734950309"
     local GearIcon = config.MinimizeIcon or "rbxassetid://10734950309"
     local Size = config.Size or UDim2.new(0, 520, 0, 340)
@@ -254,7 +254,6 @@ function TryxzLib:CreateWindow(config)
         end
     end)
 
-    -- Animación de Apertura
     Tween(Main, {Size = Size}, 0.45, Enum.EasingStyle.Back, Enum.EasingDirection.Out)
 
     -- Tuerca de Ajustes Flotante al Minimizar
@@ -532,7 +531,7 @@ function TryxzLib:CreateWindow(config)
         end
 
         TabBtn.MouseButton1Click:Connect(function()
-            TryxzLib:PlaySound(Sounds.Click, 0.4)
+            TryxzLib:PlaySound(tabOpts.Sound or Sounds.Click, 0.4)
             SelectTab()
         end)
 
@@ -796,8 +795,9 @@ function TryxzLib:CreateWindow(config)
                 end
             end)
             UserInputService.InputEnded:Connect(function(input)
-                if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+                if dragging and (input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch) then
                     dragging = false
+                    TryxzLib:PlaySound(sOpts.Sound or Sounds.Click, 0.35)
                 end
             end)
 
